@@ -162,6 +162,10 @@ router.post("/submit-survey", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  res.json({ message: "Leads API is running" });
+});
+
 /**
  * Test Boberdoo API connection
  */
