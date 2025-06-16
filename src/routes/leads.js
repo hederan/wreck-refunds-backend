@@ -83,6 +83,12 @@ async function submitToBoberdoo(leadData) {
     formData.append("atFault", leadData.atFault || "No");
     formData.append("accidentDate", leadData.accidentDate || "Within 1 week");
     formData.append("Incident_Description", leadData.incidentDescription || "");
+    formData.append(
+      "TCPA_Language",
+      "By clicking Submit, you expressly consent to receive calls and text messages for marketing purposes from our marketing partners at 1-800-TheLaw2 and Los Defensores using automated technology, including artificial/pre-recorded voice and AI generative voice. You agree that we may contact you anytime, including before 8am or after 9pm local time. Consent is not a condition of purchase. You agree to the use of electronic signatures, our Privacy Policy, and Terms of Use"
+    );
+    formData.append("Trusted_Form_URL", leadData.trustedForm);
+    formData.append("Sub_ID", leadData.transaction_id);
 
     console.log("Submit Survey - Final formData:", formData.toString());
 
@@ -222,6 +228,30 @@ router.get("/test-connection", async (req, res) => {
       error: error.message,
       response: error.response?.data,
     });
+  }
+});
+
+router.post("/myelm-survey", async (req, res) => {
+  try {
+    const { formData } = req.body;
+    console.log({ formData });
+    const response = await axios.post(
+      "https://api.accident.com/api/lead-create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "api-key": "cc2zGkZ7-UFmt-2GSC-TXwF-j0HinHoV1OXl",
+          "api-secret": "0c858d9969d6673bccc918d6256a908b91b4476a",
+        },
+      }
+    );
+
+    res.status(200).json(response.data);
+
+    console.log({ response });
+  } catch (error) {
+    console.error("MY ELM API ERROR: ", error);
   }
 });
 
